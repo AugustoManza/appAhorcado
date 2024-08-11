@@ -1,0 +1,183 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jugando al Ahorcado</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Enlace a FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .keyboard-button {
+            width: 40px;
+            height: 40px;
+            margin: 5px;
+            font-size: 16px;
+        }
+        .line {
+            display: inline-block;
+            width: 30px;
+            border-bottom: 2px solid #000;
+            margin: 0 5px;
+            text-align: center;
+            font-size: 24px;
+        }
+        .timer {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .icon {
+            font-size: 24px;
+            margin-left: 550px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col text-center">
+                <h1>Bienvenido, {{ nombre }}!</h1>
+                <p>Estás jugando en el nivel: {{ nivel }}</p>
+                <div class="timer">
+                    <i class="fas fa-clock icon"></i> <span id="timer"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Imagen -->
+            <div class="col-md-4">
+                <img id="hangman-image" src="{% static 'images/ahorcado0.png' %}" alt="Ahorcado" class="img-fluid">
+            </div>
+
+            <!-- Teclado de Letras -->
+            <div class="col-md-6">
+                <div class="keyboard">
+                    {% for letter in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" %}
+                        <button class="btn btn-secondary keyboard-button" onclick="checkLetter(this, '{{ letter }}')">{{ letter }}</button>
+                        {% if forloop.counter|divisibleby:7 %}
+                            <br>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Espacios de la Palabra -->
+        <div class="row mt-5">
+            <div class="col text-center" id="word-container">
+                {% for _ in palabra %}
+                    <span class="line" id="letter-{{ forloop.counter0 }}">&nbsp;</span>
+                {% endfor %}
+            </div>
+        </div>
+        
+    </div>
+
+    <form id="resultForm" method="POST" style="display: none;">
+        {% csrf_token %}
+        <input type="hidden" name="errores" id="erroresInput">
+        <input type="hidden" name="aciertos" id="aciertosInput">
+    </form>
+    
+    <script>
+        const palabra = "{{ palabra }}".toUpperCase();
+        let errores = 0;
+        let aciertos = 0;
+
+        const aciertoSound = new Audio("{% static 'sounds/acierto1.mp3' %}");
+        const errorSound = new Audio("{% static 'sounds/fallo1.mp3' %}");
+
+        const nivel = "{{ nivel }}";
+        let tiempo;
+
+        switch (nivel) {
+            case 'facil':
+                tiempo = 35;
+                break;
+            case 'normal':
+                tiempo = 30;
+                break;
+            case 'dificil':
+                tiempo = 25;
+                break;
+            default:
+                tiempo = 45;
+        }
+
+        // Obtener el tiempo restante de sessionStorage o usar el tiempo inicial
+        let tiempoRestante = sessionStorage.getItem('tiempoRestante') ? parseInt(sessionStorage.getItem('tiempoRestante')) : tiempo;
+
+        const timerElement = document.getElementById('timer');
+        timerElement.textContent = tiempoRestante;
+
+        // Actualizar el temporizador y almacenar el tiempo restante en sessionStorage
+        const countdown = setInterval(() => {
+            tiempoRestante--;
+            timerElement.textContent = tiempoRestante;
+            sessionStorage.setItem('tiempoRestante', tiempoRestante);
+            if (tiempoRestante <= 0) {
+                clearInterval(countdown);
+                sessionStorage.removeItem('tiempoRestante');
+                setTimeout(() => {
+                    enviarResultados("{% url 'perdiste' %}");
+                }, 1500); // Espera 1.5 segundos antes de redirigir
+            }
+        }, 1000);
+
+        function checkLetter(button, letter) {
+            let found = false;
+            for (let i = 0; i < palabra.length; i++) {
+                if (palabra[i] === letter) {
+                    document.getElementById('letter-' + i).innerText = letter;
+                    found = true;
+                    aciertos++;
+                }
+            }
+
+            button.disabled = true;
+            if (found) {
+                button.classList.remove('btn-secondary');
+                button.classList.add('btn-success');
+                aciertoSound.play();
+            } else {
+                button.classList.remove('btn-secondary');
+                button.classList.add('btn-danger');
+                errores++;
+                errorSound.play();
+                document.getElementById('hangman-image').src = "{% static 'images/ahorcado' %}" + errores + ".png";
+            }
+
+            if (errores >= 5) {
+                setTimeout(() => {
+                    enviarResultados("{% url 'perdiste' %}");
+                }, 1500); // Espera 1.5 segundos antes de redirigir
+            }
+
+            if (aciertos === palabra.length) {
+                setTimeout(() => {
+                    enviarResultados("{% url 'ganaste' %}");
+                }, 1500); // Espera 1.5 segundos antes de redirigir
+            }
+        }
+
+        function enviarResultados(url) {
+            document.getElementById('erroresInput').value = errores;
+            document.getElementById('aciertosInput').value = aciertos;
+            document.getElementById('resultForm').action = url;
+            document.getElementById('resultForm').submit();
+            sessionStorage.removeItem('tiempoRestante');
+        }
+
+        // Prevenir recarga de página con F5 y Ctrl+R / Cmd+R
+        window.addEventListener('keydown', function (e) {
+            if ((e.key === 'r' && (e.ctrlKey || e.metaKey)) || e.key === 'F5') {
+                e.preventDefault();
+            }
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Ganaste!</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .content {
+            text-align: center;
+        }
+        .message {
+            font-size: 48px;
+            color: #28a745;
+        }
+        .im {
+            width: 100vw; /* Ajusta el tamaño de la imagen */
+            height: 100vh;
+        }
+        .floating-button {
+            position: absolute;
+            top: 20px; /* Ajusta según sea necesario */
+            right: 20px; /* Ajusta según sea necesario */
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        {% comment %} <div class="message">¡Ganaste!</div> {% endcomment %}
+        <a href="{% url 'home' %}" class="btn btn-primary btn-lg floating-button">Regresar al menu Principal</a>
+        <img src="{% static 'images/ganastesx.jpg' %}" alt="Ganaste" class="img-fluid im">
+        
+    </div>
+</body>
+</html>

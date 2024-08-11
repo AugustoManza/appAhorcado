@@ -1,0 +1,44 @@
+<script>
+        const palabra = "{{ palabra }}".toUpperCase();
+        let errores = 0;
+        let aciertos = 0;
+
+        const aciertoSound = new Audio("{% static 'sounds/acierto1.mp3' %}");
+        const errorSound = new Audio("{% static 'sounds/fallo1.mp3' %}");
+
+        function checkLetter(button, letter) {
+            let found = false;
+            for (let i = 0; i < palabra.length; i++) {
+                if (palabra[i] === letter) {
+                    document.getElementById('letter-' + i).innerText = letter;
+                    found = true;
+                    aciertos++;
+                    //alert(aciertos)
+                }
+            }
+
+            button.disabled = true;
+            if (found) {
+                button.classList.remove('btn-secondary');
+                button.classList.add('btn-success');
+                aciertoSound.play();
+            } else {
+                button.classList.remove('btn-secondary');
+                button.classList.add('btn-danger');
+                errores++;
+                //alert(errores)
+                errorSound.play();
+                document.getElementById('hangman-image').src = "{% static 'images/ahorcado' %}" + errores + ".png";
+            }
+
+            if (errores >= 5) {
+                setTimeout(() => window.location.href = "{% url 'perdiste' %}", 1000);
+                // Redireccionar o reiniciar el juego
+            }
+
+            if (aciertos === palabra.length) {
+                setTimeout(() => window.location.href = "{% url 'ganaste' %}", 1000);
+                // Redireccionar o reiniciar el juego
+            }
+        }
+    </script>
