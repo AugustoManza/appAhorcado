@@ -10,5 +10,5 @@ urlpatterns = [
     path('ver-estadisticas/', views.ver_estadisticas, name='ver_estadisticas'),
     path('ganaste/', views.ganaste, name='ganaste'),
     path('perdiste/', views.perdiste, name='perdiste'),
-    # Agrega más rutas según sea necesario
+    # más rutas
 ]
