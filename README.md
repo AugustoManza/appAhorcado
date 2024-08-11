@@ -54,11 +54,11 @@ Para ejecutar este proyecto en un entorno Docker, sigue estos pasos:
 6. **Cargar la base de datos en PHPMYADMIN:**
 
    una vez realizado el paso anterior importa el archivo de la base de datos llamado:
-   ## hangman2bd.sql
+   ### hangman2bd.sql
 
-# Una vez realizado todos estos pasos ya deberia estar funcionando el proyecto.
+## Una vez realizado todos estos pasos ya deberia estar funcionando el proyecto.
 
-## Advertencia
+# Advertencia
 
 El código de este proyecto está disponible bajo una licencia de código abierto para fines de aprendizaje y demostración. **No se debe utilizar para fines de plagio en trabajos universitarios.** Se anima a los usuarios a estudiar el código para comprender mejor las tecnologías y prácticas utilizadas, pero se debe evitar presentar este código como propio en evaluaciones académicas.
 
