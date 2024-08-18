@@ -33,17 +33,17 @@ Para ejecutar este proyecto en un entorno Docker, sigue estos pasos:
     cd nombre-del-repositorio
     ```
 
-**Nota:** crea un nuevo entorno de desarrollo de py y ejecuta:
+    **Nota:** crea un nuevo entorno de desarrollo de py y ejecuta:
 
-```bash
-./nombreentorno/Scripts/activate
-```
+    ```bash
+    ./nombreentorno/Scripts/activate
+    ```
 
-verifica el funcionamiento de la aplicacion en VSCode con el comando:
+   verifica el funcionamiento de la aplicacion en VSCode con el comando:
 
-```bash
+   ```bash
     python manage.py runserver
-```
+   ```
 
 
 3. **Construye y ejecuta los contenedores Docker:**
