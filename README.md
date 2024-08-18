@@ -33,11 +33,18 @@ Para ejecutar este proyecto en un entorno Docker, sigue estos pasos:
     cd nombre-del-repositorio
     ```
 
+Nota: crea un nuevo entorno de desarrollo de py y ejecuta:
+
+```bash
+./nombreentorno/Scripts/activate
+```
+
 3. **Construye y ejecuta los contenedores Docker:**
 
     ```bash
     docker-compose up 
     ```
+    
 
 4. **Accede a la aplicación: una vez ejecutado el paso anterior deberas ir a docker y verificar que este creado tanto la imagen como los contenedores**
 
