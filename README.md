@@ -27,17 +27,24 @@ Para ejecutar este proyecto en un entorno Docker, sigue estos pasos:
     git clone https://github.com/AugustoManza/appAhorcado.git
     ```
 
-2. **Accede al directorio del proyecto:**
+2. **Accede al directorio raiz del proyecto:**
 
     ```bash
     cd nombre-del-repositorio
     ```
 
-Nota: crea un nuevo entorno de desarrollo de py y ejecuta:
+**Nota:** crea un nuevo entorno de desarrollo de py y ejecuta:
 
 ```bash
 ./nombreentorno/Scripts/activate
 ```
+
+verifica el funcionamiento de la aplicacion en VSCode con el comando:
+
+```bash
+    python manage.py runserver
+```
+
 
 3. **Construye y ejecuta los contenedores Docker:**
 
